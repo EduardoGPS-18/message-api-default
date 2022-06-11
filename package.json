@@ -11,6 +11,9 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "ENV=dev nest start",
+
+    "compose:dev": "docker compose -f ./docker-compose.dev.yaml up",
+
     "start:dev": "ENV=dev nest start --watch",
     "start:debug": "ENV=dev nest start --debug --watch",
     "start:prod": "ENV=prod node dist/main",
