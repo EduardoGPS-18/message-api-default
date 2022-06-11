@@ -4,7 +4,7 @@
 
 ## Dependencies
 
-This app is configured on so its installation is recommended [Docker](https://www.docker.com/)
+This app is configured on so its installation is recommended [Docker](https://www.docker.com/)<br>
 And you need to configure .env file, based on .env.example
 
 ## Installation
