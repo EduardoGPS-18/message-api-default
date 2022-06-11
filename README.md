@@ -4,7 +4,8 @@
 
 ## Dependencies
 
-[Docker](https://www.docker.com/) This app is configured on docker
+This app is configured on so its installation is recommended [Docker](https://www.docker.com/)
+And you need to configure .env file, based on .env.example
 
 ## Installation
 
@@ -15,7 +16,10 @@ $ npm install
 ## Running the app
 
 ```bash
-# development
+# development (without docker)
+$ npm run start:dev
+
+# development (with docker)
 $ npm run compose:dev
 
 # production
