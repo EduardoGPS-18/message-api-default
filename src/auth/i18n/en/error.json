@@ -1,0 +1,20 @@
+{
+  "validation_message": {
+    "invalid_email": "Please enter a valid email address.",
+    "invalid_password": "Please enter a valid password.",
+    "invalid_username": "Please enter a valid username.",
+    "min_length": {
+      "password": {
+        "6": "Password must be 6 characters or longer."
+      },
+      "username": {
+        "3": "Username must be 3 characters or longer."
+      }
+    }
+  },
+  "domain_error": {
+    "invalid_credentials": "Invalid credentials.",
+    "credentials_in_use": "Credentials in use.",
+    "unexpected_error": "Unexpected error."
+  }
+}

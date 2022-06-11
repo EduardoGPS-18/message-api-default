@@ -1,0 +1,20 @@
+{
+  "validation_message": {
+    "invalid_email": "Por favor digite um email valido.",
+    "invalid_password": "Por favor digite uma senha valida.",
+    "invalid_username": "Por favor digite um username valido.",
+    "min_length": {
+      "password": {
+        "6": "Senha precisa de ao menos 6 digitos."
+      },
+      "username": {
+        "3": "Username precisa de ao menos 3 digitos."
+      }
+    }
+  },
+  "domain_error": {
+    "invalid_credentials": "Credenciais invalidas.",
+    "credentials_in_use": "Credenciais em uso.",
+    "unexpected_error": "Erro inesperado."
+  }
+}

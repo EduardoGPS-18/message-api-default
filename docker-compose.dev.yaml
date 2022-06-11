@@ -1,0 +1,20 @@
+version: '3.1'
+
+services:
+  api:
+    build: 
+      dockerfile: ./Dockerfile.dev
+    container_name: message-api-default
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+    command: ["npm", "run", "start:dev"]
+  db:
+    image: postgres:14.3
+    container_name: message-db
+    environment:
+      - POSTGRES_PASSWORD=db_secret
+    ports:
+      - 5432:5432
+
