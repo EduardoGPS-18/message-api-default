@@ -8,8 +8,8 @@ import {
 } from '@nestjs/common';
 import { DomainErrors } from 'src/auth/domain/errors';
 import { LoginUseCase } from 'src/auth/domain/usecases';
+import { ExceptionResponseFilter } from 'src/shared/presentation/helpers/filter';
 import { SigninDto, UserAuthenticationDto } from '../dtos/';
-import { ExceptionResponseFilter } from '../helpers/filter';
 import { UserMapper } from '../mappers';
 
 @Controller('auth')

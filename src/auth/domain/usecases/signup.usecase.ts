@@ -1,11 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { UserEntity } from '../entities';
-import { DomainErrors, RepositoryError } from '../errors';
 import {
-  EncrypterProtocol,
   JwtProtocol,
   UuidProtocol,
-} from '../services/protocols';
+} from 'src/shared/domain/services/protocols';
+import { UserEntity } from '../entities';
+import { DomainErrors, RepositoryError } from '../errors';
+import { EncrypterProtocol } from '../services/protocols';
 import { UserRepository } from '../services/repositories';
 
 export type SignUpParams = {

@@ -9,8 +9,8 @@ import {
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { DomainErrors } from 'src/auth/domain/errors';
 import { SignupUseCase } from 'src/auth/domain/usecases/';
+import { ExceptionResponseFilter } from 'src/shared/presentation/helpers/filter';
 import { SignUpDto, UserAuthenticationDto } from '../dtos';
-import { ExceptionResponseFilter } from '../helpers/filter';
 import { UserMapper } from '../mappers';
 
 @Controller('auth')

@@ -1,8 +1,9 @@
 import { Injectable, Logger, UseFilters } from '@nestjs/common';
-import { ExceptionResponseFilter } from 'src/auth/presentation/helpers/filter/exception-response.filter';
+import { JwtProtocol } from 'src/shared/domain/services/protocols';
+import { ExceptionResponseFilter } from 'src/shared/presentation/helpers/filter';
 import { UserEntity } from '../entities';
 import { DomainErrors } from '../errors';
-import { EncrypterProtocol, JwtProtocol } from '../services/protocols';
+import { EncrypterProtocol } from '../services/protocols';
 import { UserRepository } from '../services/repositories';
 
 export type LoginParams = {

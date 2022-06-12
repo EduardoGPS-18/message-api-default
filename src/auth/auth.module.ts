@@ -3,20 +3,22 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { I18nModule, QueryResolver } from 'nestjs-i18n';
 import * as path from 'path';
-import { UserEntity } from './domain/entities';
 import {
-  EncrypterProtocol,
   JwtProtocol,
   UuidProtocol,
-} from './domain/services/protocols';
+} from 'src/shared/domain/services/protocols';
+import { JwtAdapter } from 'src/shared/infra/protocols';
+import { UuidAdapter } from 'src/shared/infra/protocols/uuid.adapter';
+import { ExceptionResponseFilter } from 'src/shared/presentation/helpers/filter';
+import { UserEntity } from './domain/entities';
+import { EncrypterProtocol } from './domain/services/protocols';
 import { UserRepository } from './domain/services/repositories';
 import { LoginUseCase, SignupUseCase } from './domain/usecases';
 import { ValidateUserUseCase } from './domain/usecases/validate-user.usecase';
-import { BcryptAdapter, JwtAdapter, UuidAdapter } from './infra/protocols';
+import { BcryptAdapter } from './infra/protocols';
 import { DbUserRepository } from './infra/repositories';
 import { SigninController, SignupController } from './presentation/controller';
 import { ValidateUserController } from './presentation/controller/validate.controller';
-import { ExceptionResponseFilter } from './presentation/helpers/filter';
 
 @Module({
   imports: [

@@ -2,7 +2,7 @@ import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
 
 export class SignUpDto {
   @IsNotEmpty({ message: 'error.validation_message.invalid_username' })
-  @MinLength(8, { message: 'error.validation_message.min_length.username.3' })
+  @MinLength(3, { message: 'error.validation_message.min_length.username.3' })
   username: string;
 
   @IsEmail({}, { message: 'error.validation_message.invalid_email' })

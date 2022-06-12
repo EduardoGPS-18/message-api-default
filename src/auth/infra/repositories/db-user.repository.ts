@@ -10,6 +10,21 @@ export class DbUserRepository implements UserRepository {
 
   constructor(private readonly dataSource: DataSource) {}
 
+  async findWhereIds(ids: string[]): Promise<UserEntity[]> {
+    try {
+      if (ids.length == 0) {
+        return [];
+      }
+      return this.dataSource
+        .getRepository(UserEntity)
+        .createQueryBuilder()
+        .where('id IN (:...ids)', { ids })
+        .getMany();
+    } catch (err) {
+      this.logger.error(err);
+    }
+  }
+
   findByEmail(email: string): Promise<UserEntity> {
     try {
       return this.dataSource
