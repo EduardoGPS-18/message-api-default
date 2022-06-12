@@ -26,7 +26,7 @@ class JwtStub implements JwtProtocol {
   }
 }
 
-const mockedUser = {
+const mockedSavedUser = {
   id: 'any_id',
   email: 'any_email',
   password: 'any_pass',
@@ -36,16 +36,16 @@ const mockedUser = {
 
 class UserRepositoryStub implements UserRepository {
   async findByEmail(email: string): Promise<UserEntity> {
-    return mockedUser;
+    return mockedSavedUser;
   }
   async findById(id: string): Promise<UserEntity> {
-    return mockedUser;
+    return mockedSavedUser;
   }
   async findWhereIds(ids: string[]): Promise<UserEntity[]> {
     return [];
   }
   async save(user: UserEntity): Promise<UserEntity> {
-    return mockedUser;
+    return mockedSavedUser;
   }
 }
 
@@ -70,32 +70,35 @@ describe('LoginUseCase', () => {
 
   it('Should call dependencies with correct values', async () => {
     const { sut, encrypterStub, jwtStub, userRepositoryStub } = makeSut();
+    const enteredEmail = 'any_email';
+    const enteredPass = 'any_password';
+    const mockedJwt = 'signed_jwt';
     jest.spyOn(encrypterStub, 'compare');
-    jest.spyOn(jwtStub, 'sign');
+    jest.spyOn(jwtStub, 'sign').mockReturnValueOnce(mockedJwt);
     jest
       .spyOn(userRepositoryStub, 'findByEmail')
-      .mockResolvedValueOnce(mockedUser);
-    jest.spyOn(userRepositoryStub, 'save').mockResolvedValue(mockedUser);
+      .mockResolvedValueOnce(mockedSavedUser);
+    jest.spyOn(userRepositoryStub, 'save').mockResolvedValue(mockedSavedUser);
 
-    await sut.execute({
-      email: 'any_email',
-      rawPassword: 'any_password',
-    });
+    await sut.execute({ email: enteredEmail, rawPassword: enteredPass });
 
-    expect(userRepositoryStub.findByEmail).toBeCalledWith('any_email');
-    expect(encrypterStub.compare).toBeCalledWith('any_password', 'any_pass');
-    expect(jwtStub.sign).toBeCalledWith({ id: 'any_id', email: 'any_email' });
+    expect(userRepositoryStub.findByEmail).toBeCalledWith(enteredEmail);
+    expect(encrypterStub.compare).toBeCalledWith(
+      enteredPass,
+      mockedSavedUser.password,
+    );
+    expect(jwtStub.sign).toBeCalledWith({ id: 'any_id', email: enteredEmail });
     expect(userRepositoryStub.save).toBeCalledWith({
-      id: mockedUser.id,
-      email: mockedUser.email,
-      password: mockedUser.password,
-      session: 'any_token',
-      username: mockedUser.username,
+      id: mockedSavedUser.id,
+      email: mockedSavedUser.email,
+      password: mockedSavedUser.password,
+      session: mockedJwt,
+      username: mockedSavedUser.username,
     });
   });
 
   it('Should throw DomainError.InvalidCredentials if email dont registered', async () => {
-    const { sut, encrypterStub, jwtStub, userRepositoryStub } = makeSut();
+    const { sut, userRepositoryStub } = makeSut();
     jest.spyOn(userRepositoryStub, 'findByEmail').mockResolvedValue({
       id: '',
       email: '',
@@ -108,5 +111,34 @@ describe('LoginUseCase', () => {
       rawPassword: 'any_password',
     });
     await expect(promise).rejects.toThrow(DomainErrors.InvalidCredentials);
+  });
+
+  it('Should throw DomainError.InvalidCredentials if password doesnt match', async () => {
+    const { sut, encrypterStub } = makeSut();
+    jest.spyOn(encrypterStub, 'compare').mockResolvedValue(false);
+    const promise = sut.execute({
+      email: 'any_mail',
+      rawPassword: 'any_password',
+    });
+    await expect(promise).rejects.toThrow(DomainErrors.InvalidCredentials);
+  });
+
+  it('Should throw DomainError.Unexpected if UserRepository.save throws', async () => {
+    const { sut, userRepositoryStub } = makeSut();
+    jest.spyOn(userRepositoryStub, 'save').mockRejectedValueOnce(new Error());
+    const promise = sut.execute({
+      email: 'any_mail',
+      rawPassword: 'any_password',
+    });
+    await expect(promise).rejects.toThrow(DomainErrors.Unexpected);
+  });
+
+  it('Should return user on success', async () => {
+    const { sut } = makeSut();
+    const user = await sut.execute({
+      email: 'any_mail',
+      rawPassword: 'any_password',
+    });
+    expect(user).toEqual(mockedSavedUser);
   });
 });
