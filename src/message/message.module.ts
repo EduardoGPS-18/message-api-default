@@ -44,8 +44,8 @@ import {
     { provide: JwtProtocol, useClass: JwtAdapter },
 
     JwtAuthGuard,
-
     ValidateUserUseCase,
+
     CreateGroupUseCase,
     GetUserGroupsUseCase,
     AddUserOnGroupUseCase,
