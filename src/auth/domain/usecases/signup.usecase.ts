@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import {
   JwtProtocol,
   UuidProtocol,
-} from 'src/shared/domain/services/protocols';
+} from '../../../shared/domain/services/protocols';
 import { UserEntity } from '../entities';
 import { DomainErrors, RepositoryError } from '../errors';
 import { EncrypterProtocol } from '../services/protocols';

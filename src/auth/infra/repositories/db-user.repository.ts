@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { UserEntity } from 'src/auth/domain/entities';
-import { RepositoryError } from 'src/auth/domain/errors';
-import { UserRepository } from 'src/auth/domain/services/repositories';
 import { DataSource } from 'typeorm';
+import { UserEntity } from '../../domain/entities';
+import { RepositoryError } from '../../domain/errors';
+import { UserRepository } from '../../domain/services/repositories';
 
 @Injectable()
 export class DbUserRepository implements UserRepository {

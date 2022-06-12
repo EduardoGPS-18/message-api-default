@@ -1,6 +1,6 @@
 import { Injectable, Logger, UseFilters } from '@nestjs/common';
-import { JwtProtocol } from 'src/shared/domain/services/protocols';
-import { ExceptionResponseFilter } from 'src/shared/presentation/helpers/filter';
+import { JwtProtocol } from '../../../shared/domain/services/protocols';
+import { ExceptionResponseFilter } from '../../../shared/presentation/helpers/filter';
 import { UserEntity } from '../entities';
 import { DomainErrors } from '../errors';
 import { EncrypterProtocol } from '../services/protocols';
@@ -25,7 +25,7 @@ export class LoginUseCase {
   async execute(params: LoginParams): Promise<UserEntity> {
     const { email, rawPassword } = params;
     const user = await this.userRepository.findByEmail(email);
-    if (!user) {
+    if (!user.id) {
       this.logger.verbose(DomainErrors.InvalidCredentials.name);
       throw new DomainErrors.InvalidCredentials();
     }

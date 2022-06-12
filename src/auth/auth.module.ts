@@ -1,15 +1,13 @@
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { I18nModule, QueryResolver } from 'nestjs-i18n';
 import * as path from 'path';
-import {
-  JwtProtocol,
-  UuidProtocol,
-} from 'src/shared/domain/services/protocols';
 import { JwtAdapter } from 'src/shared/infra/protocols';
 import { UuidAdapter } from 'src/shared/infra/protocols/uuid.adapter';
 import { ExceptionResponseFilter } from 'src/shared/presentation/helpers/filter';
+import { JwtAuthGuard } from 'src/shared/presentation/helpers/guards';
+import { JwtProtocol, UuidProtocol } from '../shared/domain/services/protocols';
 import { UserEntity } from './domain/entities';
 import { EncrypterProtocol } from './domain/services/protocols';
 import { UserRepository } from './domain/services/repositories';
@@ -37,6 +35,7 @@ import { ValidateUserController } from './presentation/controller/validate.contr
     TypeOrmModule.forFeature([UserEntity]),
   ],
   providers: [
+    JwtService,
     { provide: UuidProtocol, useClass: UuidAdapter },
     { provide: JwtProtocol, useClass: JwtAdapter },
     { provide: EncrypterProtocol, useClass: BcryptAdapter },
@@ -46,8 +45,10 @@ import { ValidateUserController } from './presentation/controller/validate.contr
     LoginUseCase,
     ValidateUserUseCase,
 
+    JwtAuthGuard,
     ExceptionResponseFilter,
   ],
   controllers: [SignupController, SigninController, ValidateUserController],
+  exports: [JwtService, ValidateUserUseCase, JwtAuthGuard],
 })
 export class AuthModule {}

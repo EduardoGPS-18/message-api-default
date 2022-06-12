@@ -1,16 +1,10 @@
 import { Module } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
 import { UserRepository } from 'src/auth/domain/services/repositories';
-import { ValidateUserUseCase } from 'src/auth/domain/usecases/validate-user.usecase';
 import { DbUserRepository } from 'src/auth/infra/repositories';
-import {
-  JwtProtocol,
-  UuidProtocol,
-} from 'src/shared/domain/services/protocols';
 import { JwtAdapter, UuidAdapter } from 'src/shared/infra/protocols';
-import { JwtAuthGuard } from 'src/shared/presentation/helpers/guards';
+import { JwtProtocol, UuidProtocol } from '../shared/domain/services/protocols';
 import { GroupEntity, MessageEntity } from './domain/entities';
 import {
   GroupRepository,
@@ -36,15 +30,11 @@ import {
 @Module({
   imports: [AuthModule, TypeOrmModule.forFeature([GroupEntity, MessageEntity])],
   providers: [
-    JwtService,
     { provide: UuidProtocol, useClass: UuidAdapter },
     { provide: GroupRepository, useClass: DBGroupRepository },
     { provide: UserRepository, useClass: DbUserRepository },
     { provide: MessageRepository, useClass: DbMessageRepository },
     { provide: JwtProtocol, useClass: JwtAdapter },
-
-    JwtAuthGuard,
-    ValidateUserUseCase,
 
     CreateGroupUseCase,
     GetUserGroupsUseCase,

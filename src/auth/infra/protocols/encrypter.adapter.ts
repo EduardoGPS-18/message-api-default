@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { EncrypterProtocol } from 'src/auth/domain/services/protocols';
+import { EncrypterProtocol } from '../../domain/services/protocols';
 
 import * as bcrypt from 'bcrypt';
 

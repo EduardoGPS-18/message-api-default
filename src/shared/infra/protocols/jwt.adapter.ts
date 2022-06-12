@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { JwtPayload, JwtProtocol } from 'src/shared/domain/services/protocols';
+import {
+  JwtPayload,
+  JwtProtocol,
+} from '../../../shared/domain/services/protocols';
 
 @Injectable()
 export class JwtAdapter implements JwtProtocol {

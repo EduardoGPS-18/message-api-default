@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { UuidProtocol } from 'src/shared/domain/services/protocols';
 import * as uuid from 'uuid';
+import { UuidProtocol } from '../../../shared/domain/services/protocols';
 
 @Injectable()
 export class UuidAdapter implements UuidProtocol {

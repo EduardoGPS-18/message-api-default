@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { UserRepository } from 'src/auth/domain/services/repositories';
-import { UuidProtocol } from 'src/shared/domain/services/protocols';
+import { UserRepository } from '../../../../auth/domain/services/repositories';
+import { UuidProtocol } from '../../../../shared/domain/services/protocols';
 import { GroupEntity } from '../../entities';
 import { GroupRepository } from '../repositories/group.repository';
 

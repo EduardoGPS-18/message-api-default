@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { JwtProtocol } from 'src/shared/domain/services/protocols';
+import { JwtProtocol } from '../../../shared/domain/services/protocols';
 import { UserEntity } from '../entities';
 import { DomainErrors } from '../errors';
 import { UserRepository } from '../services/repositories';
