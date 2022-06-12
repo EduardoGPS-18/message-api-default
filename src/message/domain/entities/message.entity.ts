@@ -1,12 +1,13 @@
 import { UserEntity } from 'src/auth/domain/entities';
-import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { GroupEntity } from './group.entity';
 
 @Entity('message')
 export class MessageEntity {
   @PrimaryColumn({ length: 255, unique: true })
   id: string;
 
-  @OneToOne((_) => UserEntity, (user) => user.id, { eager: true })
+  @ManyToOne((_) => UserEntity, (user) => user.id, { eager: true })
   @JoinColumn()
   sender: UserEntity;
 
@@ -15,4 +16,7 @@ export class MessageEntity {
 
   @Column()
   sendedIn: Date;
+
+  @ManyToOne((_) => GroupEntity, (group) => group.id)
+  group: GroupEntity;
 }

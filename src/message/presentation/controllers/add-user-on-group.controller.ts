@@ -11,13 +11,13 @@ export class AddUserOnGroupController {
 
   @Post('add-user')
   @UseGuards(JwtAuthGuard)
-  handle(
+  async handle(
     @GetUser() user: UserEntity,
     @Body() addUserOnGroupDto: AddUserOnGroupDto,
   ): Promise<any> {
     const { groupId, userId } = addUserOnGroupDto;
     const ownerId = user.id;
-    return this.addUserOnGroupUseCase.execute({
+    return await this.addUserOnGroupUseCase.execute({
       groupId,
       userId,
       ownerId,
