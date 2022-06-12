@@ -45,7 +45,6 @@ export class DBGroupRepository implements GroupRepository {
   }
   async findGroupsByUserId(userId: string): Promise<GroupEntity[]> {
     try {
-      console.log(userId);
       const x = await this.dataSource
         .getRepository(GroupEntity)
         .createQueryBuilder('group')
