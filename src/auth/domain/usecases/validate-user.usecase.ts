@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtProtocol } from '../../../shared/domain/services/protocols';
 import { UserEntity } from '../entities';
-import { DomainErrors } from '../errors';
+import { DomainError } from '../errors';
 import { UserRepository } from '../services/repositories';
 
 export type ValidateUserParams = {
@@ -23,8 +23,8 @@ export class ValidateUserUseCase {
     const user = await this.userRepository.findById(id);
 
     if (!user || user.session !== jwt) {
-      this.logger.verbose(DomainErrors.InvalidUser.name);
-      throw new DomainErrors.InvalidUser();
+      this.logger.verbose(DomainError.InvalidUser.name);
+      throw new DomainError.InvalidUser();
     }
 
     return user;

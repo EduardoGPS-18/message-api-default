@@ -6,7 +6,7 @@ import * as bcrypt from 'bcrypt';
 @Injectable()
 export class BcryptAdapter implements EncrypterProtocol {
   async encrypt(value: string): Promise<string> {
-    const salts = 12;
+    const salts = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(value, salts);
     return hash;
   }

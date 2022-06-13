@@ -1,4 +1,4 @@
-export class DomainErrors {
+export class DomainError {
   static CredentialsAlreadyInUse = class CredentialsAlreadyInUse extends Error {};
   static InvalidCredentials = class InvalidCredentials extends Error {};
   static Unexpected = class Unexpected extends Error {};

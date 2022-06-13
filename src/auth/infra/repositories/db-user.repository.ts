@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { RepositoryError } from 'src/auth/domain/errors';
 import { DataSource } from 'typeorm';
 import { UserEntity } from '../../domain/entities';
-import { RepositoryError } from '../../domain/errors';
 import { UserRepository } from '../../domain/services/repositories';
 
 @Injectable()

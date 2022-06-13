@@ -2,7 +2,7 @@ import { Injectable, Logger, UseFilters } from '@nestjs/common';
 import { JwtProtocol } from '../../../shared/domain/services/protocols';
 import { ExceptionResponseFilter } from '../../../shared/presentation/helpers/filter';
 import { UserEntity } from '../entities';
-import { DomainErrors } from '../errors';
+import { DomainError } from '../errors';
 import { EncrypterProtocol } from '../services/protocols';
 import { UserRepository } from '../services/repositories';
 
@@ -23,26 +23,38 @@ export class LoginUseCase {
   ) {}
 
   async execute(params: LoginParams): Promise<UserEntity> {
-    const { email, rawPassword } = params;
-    const user = await this.userRepository.findByEmail(email);
-    if (!user.id) {
-      this.logger.verbose(DomainErrors.InvalidCredentials.name);
-      throw new DomainErrors.InvalidCredentials();
-    }
-
-    if (!(await this.encrypterProtocol.compare(rawPassword, user.password))) {
-      this.logger.verbose(DomainErrors.InvalidCredentials.name);
-      throw new DomainErrors.InvalidCredentials();
-    }
-
-    const session = this.jwtProtocol.sign({ id: user.id, email: user.email });
-    user.session = session;
     try {
-      await this.userRepository.save(user);
+      const { email, rawPassword } = params;
+      let user = await this.userRepository.findByEmail(email);
+
+      if (!user.id) {
+        this.logger.verbose(DomainError.InvalidCredentials.name);
+        throw new DomainError.InvalidCredentials();
+      }
+
+      if (!(await this.encrypterProtocol.compare(rawPassword, user.password))) {
+        this.logger.verbose(DomainError.InvalidCredentials.name);
+        throw new DomainError.InvalidCredentials();
+      }
+
+      const session = this.jwtProtocol.sign({
+        id: user.id,
+        email: user.email,
+      });
+      user.session = session;
+      try {
+        await this.userRepository.save(user);
+      } catch (err) {
+        this.logger.error(err);
+        throw new DomainError.Unexpected();
+      }
+      return user;
     } catch (err) {
-      this.logger.error(err);
-      throw new DomainErrors.Unexpected();
+      if (err instanceof DomainError.InvalidCredentials) {
+        throw err;
+      } else {
+        throw new DomainError.Unexpected();
+      }
     }
-    return user;
   }
 }

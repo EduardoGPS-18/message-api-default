@@ -1,7 +1,7 @@
 import { JwtPayload, JwtProtocol } from 'src/shared/domain/services/protocols';
 import { LoginUseCase } from '.';
 import { UserEntity } from '../entities';
-import { DomainErrors } from '../errors';
+import { DomainError } from '../errors';
 import { EncrypterProtocol } from '../services/protocols';
 import { UserRepository } from '../services/repositories';
 
@@ -110,7 +110,7 @@ describe('LoginUseCase', () => {
       email: 'any_mail',
       rawPassword: 'any_password',
     });
-    await expect(promise).rejects.toThrow(DomainErrors.InvalidCredentials);
+    await expect(promise).rejects.toThrow(DomainError.InvalidCredentials);
   });
 
   it('Should throw DomainError.InvalidCredentials if password doesnt match', async () => {
@@ -120,7 +120,7 @@ describe('LoginUseCase', () => {
       email: 'any_mail',
       rawPassword: 'any_password',
     });
-    await expect(promise).rejects.toThrow(DomainErrors.InvalidCredentials);
+    await expect(promise).rejects.toThrow(DomainError.InvalidCredentials);
   });
 
   it('Should throw DomainError.Unexpected if UserRepository.save throws', async () => {
@@ -130,7 +130,29 @@ describe('LoginUseCase', () => {
       email: 'any_mail',
       rawPassword: 'any_password',
     });
-    await expect(promise).rejects.toThrow(DomainErrors.Unexpected);
+    await expect(promise).rejects.toThrow(DomainError.Unexpected);
+  });
+
+  it('Should throw DomainError.Unexpected if UserRepository.findByEmail throws', async () => {
+    const { sut, userRepositoryStub } = makeSut();
+    jest
+      .spyOn(userRepositoryStub, 'findByEmail')
+      .mockRejectedValueOnce(new Error());
+    const promise = sut.execute({
+      email: 'any_mail',
+      rawPassword: 'any_password',
+    });
+    await expect(promise).rejects.toThrow(DomainError.Unexpected);
+  });
+
+  it('Should throw DomainError.Unexpected if Encrypter.compare throws', async () => {
+    const { sut, encrypterStub } = makeSut();
+    jest.spyOn(encrypterStub, 'compare').mockRejectedValueOnce(new Error());
+    const promise = sut.execute({
+      email: 'any_mail',
+      rawPassword: 'any_password',
+    });
+    await expect(promise).rejects.toThrow(DomainError.Unexpected);
   });
 
   it('Should return user on success', async () => {
@@ -141,4 +163,5 @@ describe('LoginUseCase', () => {
     });
     expect(user).toEqual(mockedSavedUser);
   });
+  1;
 });
